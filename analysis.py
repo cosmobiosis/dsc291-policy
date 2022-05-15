@@ -5,6 +5,7 @@ import numpy as np # linear algebra
 import os # accessing directory structure
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from sklearn.cluster import KMeans
+from helper import *
 
 def plotCorrelationMatrix(df, graphWidth):
     filename = df.dataframeName
@@ -41,11 +42,23 @@ print("Sample geo-info, X Coordinate:")
 print(df1["X Coordinate"].iloc[0])
 print("Sample geo-info, latitude:")
 print(df1["Latitude"].iloc[0])
+print("Sample time-info, time series:")
+time_str = df1["Date"].iloc[0]
+print(convert_timestr_to_epoch(time_str))
+
 #plotCorrelationMatrix(df1, 8)
 
-df2 = df1[["Latitude", "Longitude"]]
+df2 = df1[["Latitude", "Longitude", "Date"]]
 df2.dropna()
-mat = clean_dataset(df2).values
+df4 = df2[["Latitude", "Longitude"]]
+df4['epoch'] = df1.apply(lambda row: convert_timestr_to_epoch(row["Date"]), axis=1)
+df4['hrs'] = df1.apply(lambda row: convert_timestr_to_hours(row["Date"]), axis=1)
+print("Before normalization")
+print(df4)
+print("After normalization")
+df5=(df4-df4.mean())/df4.std() # normalization
+print(df5)
+df5.dropna()
+df6 = clean_dataset(df5)
+mat = df5.values
 kmeans = KMeans(n_clusters=55, random_state=0).fit(mat)
-
-
