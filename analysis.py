@@ -61,9 +61,9 @@ print(df5)
 df5.dropna()
 df6 = clean_dataset(df5)
 df5 = df5[["Latitude", "Longitude"]]
-df5 = df5.head(5000)
+df5 = df5.head(2050)
 reduced_data = df5.values
-kmeans = KMeans(n_clusters=31, random_state=0).fit(reduced_data)
+kmeans = KMeans(n_clusters=14, random_state=0).fit(reduced_data)
 
 h = 0.02
 # Plot the decision boundary. For that, we will assign a color to each
